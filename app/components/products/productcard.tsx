@@ -6,7 +6,7 @@ import Image from "next/image";
 import Rating from "@mui/material/Rating";
 
 const ProductCard = ({ data }: { data: any }) => {
-    
+    const rating = data.reviews.reduce((acc: number, item: any) => item.rating + acc, 0) / data.reviews.length
     return (
         <div className="col-span-1 cursor-pointer border-[1.2px] border-slate-200 bg-slate-50 rounded-sm p-2 transition hover:scale-105 text-center text-sm  ">
             <div className="flex flex-col items-center h-full w-full gap-1">
@@ -20,7 +20,7 @@ const ProductCard = ({ data }: { data: any }) => {
                 </div>
                 <div className="mt-4">{TruncateText(data.name)}</div>
                 <div className="">
-                    <Rating name="simple-controlled" value={5} />
+                    <Rating value={rating} readOnly />
                 </div>
                 <div className="">{data.reviews.length} reviews</div>
                 <div className="font-semibold">{FortmatPrice(data.price)}</div>
