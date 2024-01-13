@@ -1,5 +1,6 @@
 "use client";
 import SetColor from "@/app/components/products/setcolor";
+import SetQuantity from "@/app/components/products/setquantity";
 import { Rating } from "@mui/material";
 import { FC, useCallback, useState } from "react";
 interface ProductDetailProps {
@@ -38,16 +39,24 @@ const ProductDetail: FC<ProductDetailProps> = ({ product }) => {
     const rating =
         product.reviews.reduce((acc: number, item: any) => item.rating + acc, 0) /
         product.reviews.length;
-    //
-    const hdlColorSelect = useCallback(
-        (value: SelectedImgType) => {
-            setCartProduct((prev) => {
-                return { ...prev, selectedImg: value };
-            });
-        },
-        []
-    );
-    console.log(cartProduct);
+    // function hdl
+    const hdlColorSelect = useCallback((value: SelectedImgType) => {
+        if (cartProduct.quantity === 99) return
+        setCartProduct((prev) => {
+            return { ...prev, selectedImg: value };
+        });
+    }, [cartProduct]);
+    const hdlQuantityIncrease = useCallback(() => {
+        setCartProduct((prev) => {
+            return { ...prev, quantity: prev.quantity++ };
+        });
+    }, []);
+    const hdlQuantityDecrease = useCallback(() => {
+        if (cartProduct.quantity === 1) return
+        setCartProduct((prev) => {
+            return { ...prev, quantity: prev.quantity-- };
+        });
+    }, [cartProduct]);
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 ">
             <div className="">image</div>
@@ -86,9 +95,12 @@ const ProductDetail: FC<ProductDetailProps> = ({ product }) => {
                     hdlColorSelect={hdlColorSelect}
                 />
                 <Horizontal />
-                <div>
-                    <span className="font-semibold">QUANTITY:</span>
-                </div>
+                {/* quantity */}
+                <SetQuantity
+                    cartProduct={cartProduct}
+                    hdlQuantityIncrease={hdlQuantityIncrease}
+                    hdlQuantityDecrease={hdlQuantityDecrease}
+                />
                 <Horizontal />
                 <div>
                     <span className="font-semibold">add to cart:</span>
